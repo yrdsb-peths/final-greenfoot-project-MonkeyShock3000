@@ -1,10 +1,10 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Blue here.
+ * Character 1
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Aaran 
+ * @version May 2024
  */
 public class Blue extends Actor
 {

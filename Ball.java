@@ -13,12 +13,13 @@ public class Ball extends Actor
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     
-    private int deltaX = 2;
-    private int deltaY = 2;
+    public int deltaX = 2;
+    public int deltaY = 2;
     
     public void act()
     {
         // Add your action code here.
+               
         move();
         checkCollisions();
     }
@@ -28,23 +29,51 @@ public class Ball extends Actor
        setLocation(getX() + deltaX, getY() +  deltaY); 
     }
     
-    private void checkCollisions()
+    public void checkCollisions()
     {
-        if (getX() <= 0 || getX() >= getWorld().getWidth())
+        World myWorld = getWorld();
+        if (myWorld == null)
+        {
+            return;
+        }
+        
+        // Check right boundary 
+        if (getX() >= (getWorld().getWidth() - getImage().getWidth()/2))
+        {
+            // Increase score
+            ((MyWorld) getWorld()).updateScoreForRight();
+            
+            setLocation(getWorld().getWidth()/2, getWorld().getHeight()/2); // Reset ball 
+            
+        }
+        
+        // Check left boundary
+        if (getX() <= getImage().getWidth()/2)
+        {
+            // Increase score
+            ((MyWorld) getWorld()).updateScoreForLeft();
+            
+            setLocation(getWorld().getWidth()/2, getWorld().getHeight()/2); // Reset ball
+        }
+        
+        // Check bottom boundary 
+        if (getY() >= (getWorld().getHeight()) - getImage().getHeight()/2)
+        {
+            deltaY = -deltaY;
+        }
+        
+        // Check top boundary 
+        if (getY() <= getImage().getHeight()/2)
+        {
+            deltaY = -deltaY;
+        }
+        
+        Actor PaddleRight = getOneIntersectingObject(PaddleRight.class);
+        Actor PaddleLeft = getOneIntersectingObject(PaddleLeft.class);
+        
+        if (PaddleRight != null || PaddleLeft != null)
         {
             deltaX = -deltaX;
-        }
-        
-        if (getY() <= 0 || getY() >= getWorld().getHeight())
-        {
-            deltaY = -deltaY;
-        }
-        
-        Actor paddle = getOneIntersectingObject(Paddle.class);
-        
-        if (paddle != null)
-        {
-            deltaY = -deltaY;
         }
     }
 }

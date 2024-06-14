@@ -1,7 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * The world.
+ * Main game world, manages game logic 
  * 
  * @author Aaran 
  * @version May
@@ -9,20 +9,26 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class MyWorld extends World
 {
 
-    /**
-     * Constructor for objects of class MyWorld.
-     * 
-     */
+    // Scores for each player
     public int scoreLeft = 0;
     public int scoreRight = 0;
+    
+    // Scoreboard
     public Counter left;
     public Counter right;
     
+    /**
+     * Checks when to end the game
+     */
     public void act()
     {
-        
+        endGame();
     }
     
+    /**
+     * Constructor for objects of class MyWorld.
+     * Initializes world and sets up background, scores and objects
+     */
     public MyWorld()
     {    
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
@@ -31,10 +37,14 @@ public class MyWorld extends World
         //Create scores
         drawBackground();
         
+        // Prepares objects
         prepare();
         
     }
     
+    /**
+     * Draws scores
+     */
     public void drawBackground()
     {
         if (left == null)
@@ -46,7 +56,7 @@ public class MyWorld extends World
         
         else
         {
-            left.setLocation(100, 30);
+            left.setLocation(100, 30); // Verifies location
         }
         
         if (right == null)
@@ -57,6 +67,9 @@ public class MyWorld extends World
         }
     }
     
+    /**
+     * Creates and draws the ball and the paddles
+     */
     public void prepare()
     {
         //Create the ball object 
@@ -74,6 +87,9 @@ public class MyWorld extends World
     
     }
     
+    /**
+     * Updates current score for the left player
+     */
     public void updateScoreForLeft() 
     {
         if (left != null)
@@ -83,12 +99,43 @@ public class MyWorld extends World
         }
     }
     
+    /**
+     * updates current score for the right player
+     */
     public void updateScoreForRight() 
     {
         if (right != null)
         {
             scoreLeft++;
             left.setValue(scoreLeft);
+        }
+    }
+    
+    /**
+     * returns current score for the left player
+     */
+    public int getScoreLeft()
+    {
+        return scoreLeft;
+    }
+    
+    /**
+     * returns current score for the right player
+     */
+    public int getScoreRight()
+    {
+        return scoreRight;
+    }
+    
+    /**
+     * Changes world to the end screen
+     */
+    public void endGame()
+    {
+        if (scoreLeft == 10 || scoreRight == 10)
+        {
+            End endScreen = new End(scoreLeft, scoreRight);
+            Greenfoot.setWorld(endScreen); // Changes to end screen
         }
     }
 }

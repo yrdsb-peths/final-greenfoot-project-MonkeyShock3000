@@ -1,10 +1,10 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Ball here.
+ * Represents the ball object and deals with collisions
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Aaran
+ * @version June
  */
 public class Ball extends Actor
 {
@@ -13,9 +13,18 @@ public class Ball extends Actor
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     
+    // Sounds
+    GreenfootSound paddleHitNoise = new GreenfootSound("paddleHitNoise.mp3");
+    GreenfootSound wallHitNoise = new GreenfootSound("wallHitNoise.mp3");
+    GreenfootSound pointNoise = new GreenfootSound("pointNoise.mp3");
+    
+    // Speeds
     public int deltaX = 2;
     public int deltaY = 2;
     
+    /**
+     * Handles the movement and checks for collisions
+     */
     public void act()
     {
         // Add your action code here.
@@ -24,15 +33,22 @@ public class Ball extends Actor
         checkCollisions();
     }
     
+    /**
+     * Moves the ball 
+     */
     private void move()
     {
        setLocation(getX() + deltaX, getY() +  deltaY); 
     }
     
+    /**
+     * Checks for and handles collisions with objects and boundries, and plays sounds.
+     * Also, managing points.
+     */
     public void checkCollisions()
     {
-        World myWorld = getWorld();
-        if (myWorld == null)
+        World myWorld = getWorld(); // Gets current world
+        if (myWorld == null) // If no world is present, exit the method
         {
             return;
         }
@@ -42,7 +58,7 @@ public class Ball extends Actor
         {
             // Increase score
             ((MyWorld) getWorld()).updateScoreForRight();
-            
+            pointNoise.play(); //Plays sound
             setLocation(getWorld().getWidth()/2, getWorld().getHeight()/2); // Reset ball 
             
         }
@@ -51,29 +67,33 @@ public class Ball extends Actor
         if (getX() <= getImage().getWidth()/2)
         {
             // Increase score
-            ((MyWorld) getWorld()).updateScoreForLeft();
-            
+            ((MyWorld) getWorld()).updateScoreForLeft(); //Updates score
+            pointNoise.play(); // Plays sound
             setLocation(getWorld().getWidth()/2, getWorld().getHeight()/2); // Reset ball
         }
         
         // Check bottom boundary 
         if (getY() >= (getWorld().getHeight()) - getImage().getHeight()/2)
         {
-            deltaY = -deltaY;
+            wallHitNoise.play(); //Plays wall hit sound
+            deltaY = -deltaY; // Switches the y-direction of the ball
         }
         
         // Check top boundary 
         if (getY() <= getImage().getHeight()/2)
         {
-            deltaY = -deltaY;
+            wallHitNoise.play(); //Plays wall hit sound
+            deltaY = -deltaY; // Switches the y-direction of the ball
         }
         
+        // Checks for collisions with either paddle
         Actor PaddleRight = getOneIntersectingObject(PaddleRight.class);
         Actor PaddleLeft = getOneIntersectingObject(PaddleLeft.class);
         
         if (PaddleRight != null || PaddleLeft != null)
         {
-            deltaX = -deltaX;
+            paddleHitNoise.play(); // Plays paddle hit noise
+            deltaX = -deltaX; // Switches ball x-direction
         }
     }
 }
